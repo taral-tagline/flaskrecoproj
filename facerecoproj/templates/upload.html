@@ -15,23 +15,12 @@
         </div>
         <div class="container">
             <div>
-                <img src="{{ url_for('static', filename = static_url ) }}" alt="User Image" width="40%"><br><br>
                 <form method="post" enctype="multipart/form-data">
+                    <img src="{{ url_for('static', filename = static_url ) }}" alt="User Image" width="40%"><br><br>
+                    <input type="text" hidden value={{static_url}} name="my_image">
                     <div class="form-group">
                         <label for="name">Name:</label>
                         <input type="text" id="name" placeholder="Enter name" name="name">
-                    </div>
-                    <div class="form-group">
-                        <label for="department">Department:</label>
-                        <input type="text" id="department" placeholder="Department" name="department">
-                    </div>
-                    <div class="form-group">
-                        <label for="gender">Gender:</label>
-                        <input type="radio" id="radio-0" name="gender" value="male">Male
-                        <input type="radio" id="radio-1" name="gender" value="female">Female
-                    </div>
-                    <div class="form-group">
-                        <input type="file" id="file" name="file">
                     </div>
 
                     <button type="submit" class="btn btn-success">Submit</button>
