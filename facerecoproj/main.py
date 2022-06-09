@@ -10,7 +10,7 @@ app.config['UPLOAD_FOLDER'] = PEOPLE_FOLDER
 
 @app.route("/")
 def index():
-    static_url = "capture_image/taral.jpeg"
+    static_url = "capture_image/Frame0.jpg"
     return render_template("index.html", static_url = static_url)
 
 @app.route('/video_feed')
@@ -19,15 +19,11 @@ def video_feed():
 
 @app.route("/upload",methods = ['POST','GET'])
 def upload():
-    static_url = "capture_image/taral.jpeg"
+    static_url = "capture_image/Frame0.jpg"
     if request.method == 'POST':  
         uname=request.form['input_name']
         upload_file = request.files['input_file']
         filename = upload_file.filename
-        # # Store Form Data into table
-        # upload = Upload(name=uname , data = upload_file.read())
-        # db.session.add(upload)
-        # db.session.commit()
 
         # Store image in folder
         upload_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -38,8 +34,3 @@ def upload():
         return render_template('upload.html',simple_msg = simple_msg, static_url = static_url)
     else:
         return render_template('upload.html', static_url = static_url)
-
-@app.route('/display/<filename>')
-def display_image():
-	#print('display_image filename: ' + filename)
-	return redirect(url_for('static', filename='capture_image/taral.jpeg'), code=301)
