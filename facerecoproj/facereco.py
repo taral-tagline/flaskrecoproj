@@ -3,18 +3,13 @@ import cv2
 import numpy as np
 import os
 from pathlib import Path
+import pickle
 
-camera = cv2.VideoCapture(
-    os.path.join(Path(__file__).resolve().parent, "static/capture_image/face_video.mp4")
-)
+camera = cv2.VideoCapture(0)
 
-my_image = face_recognition.load_image_file(
-    os.path.join(Path(__file__).resolve().parent, "static/capture_image/taral.jpeg")
-)
-my_encodings = face_recognition.face_encodings(my_image)[0]
-
-known_face_encodings = [my_encodings]
-known_face_names = ["taral"]
+data = pickle.loads(open('face_enc.pickle', "rb").read())
+known_face_encodings = data['encodings']
+known_face_names = data['names']
 
 # Initialize some variables
 face_locations = []
