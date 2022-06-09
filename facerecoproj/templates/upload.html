@@ -1,29 +1,67 @@
 <html>
+
 <head>
     <title>
-
+        Upload
     </title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
+
 <body>
     <center>
-    <div class="page-header">
-        <h1>Upload</h1>
-    </div>
-    <div class="container">
-        <div>
-            <img src="{{ url_for('static', filename = static_url ) }}" alt="User Image" width="40%"><br><br>
-            <form method="post" enctype="multipart/form-data">
-                <label>Enter Name:- </label>
-                <input type="text" name="input_name" /><br><br>
-
-                <input type="file" name="input_file" multiple="multiple" />
-                
-                <p> <input type="submit" value="Submit" /> </p>
-            </form>
-            <a href="http://localhost:5000/video_feed">go to</a>
-            <p>{{simple_msg}}</p>
+        <div class="page-header">
+            <h1>Upload</h1>
         </div>
-    </div>
+        <div class="container">
+            <div>
+                <img src="{{ url_for('static', filename = static_url ) }}" alt="User Image" width="40%"><br><br>
+                <form method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" placeholder="Enter name" name="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="department">Department:</label>
+                        <input type="text" id="department" placeholder="Department" name="department">
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender:</label>
+                        <input type="radio" id="radio-0" name="gender" value="male">Male
+                        <input type="radio" id="radio-1" name="gender" value="female">Female
+                    </div>
+                    <div class="form-group">
+                        <input type="file" id="file" name="file">
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </form>
+                </form>
+                <a href="{{ url_for('index') }}">go to</a>
+                <p>
+                    {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                <ul class=flashes>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endwith %}
+                </p>
+            </div>
+        </div>
     </center>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>
