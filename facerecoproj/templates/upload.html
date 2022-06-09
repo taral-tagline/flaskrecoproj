@@ -1,29 +1,29 @@
-<!doctype html>
-<title>Python Flask File Upload Example</title>
-<h2>Select a file to upload</h2>
-<p>
-	{% with messages = get_flashed_messages() %}
-	  {% if messages %}
-		<ul>
-		{% for message in messages %}
-		  <li>{{ message }}</li>
-		{% endfor %}
-		</ul>
-	  {% endif %}
-	{% endwith %}
-</p>
-{% if filename %}
-	<div>
-		<img src="{{ url_for('display_image', filename=filename) }}">
-	</div>
-{% endif %}
-<form method="post" action="/" enctype="multipart/form-data">
-    <dl>
-		<p>
-			<input type="file" name="file" autocomplete="off" required>
-		</p>
-    </dl>
-    <p>
-		<input type="submit" value="Submit">
-	</p>
-</form>
+<html>
+<head>
+    <title>
+
+    </title>
+</head>
+<body>
+    <center>
+    <div class="page-header">
+        <h1>Upload</h1>
+    </div>
+    <div class="container">
+        <div>
+            <img src="{{ url_for('static', filename = static_url ) }}" alt="User Image" width="40%"><br><br>
+            <form method="post" enctype="multipart/form-data">
+                <label>Enter Name:- </label>
+                <input type="text" name="input_name" /><br><br>
+
+                <input type="file" name="input_file" multiple="multiple" />
+                
+                <p> <input type="submit" value="Submit" /> </p>
+            </form>
+            <a href="http://localhost:5000/video_feed">go to</a>
+            <p>{{simple_msg}}</p>
+        </div>
+    </div>
+    </center>
+</body>
+</html>
