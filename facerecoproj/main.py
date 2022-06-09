@@ -5,7 +5,6 @@ from .pickle_mesurments import add_into_pickle
 import os
 from pathlib import Path
 from flask_sqlalchemy import SQLAlchemy
-import pickle   
 
 
 PEOPLE_FOLDER = os.path.join(Path(__file__).resolve().parent, "static/capture_image")
@@ -23,6 +22,7 @@ db.init_app(app)
 PEOPLE_FOLDER = os.path.join(Path(__file__).resolve().parent, "static/capture_image")
 knownEncodings = []
 knownNames = []
+capture = 0
 
 
 app = Flask(__name__)
@@ -42,7 +42,7 @@ def video_feed():
 
 @app.route("/upload", methods=["POST", "GET"])
 def upload():
-    static_url = "capture_image/Frame0.jpg"
+    static_url = "capture_image/capture.jpg"
     if request.method == "POST":
         name = request.form["name"]
         dept = request.form["department"]

@@ -10,13 +10,9 @@ camera = cv2.VideoCapture(
 )
 
 data = pickle.loads(open('face_enc.pickle', "rb").read())
-
-try:
-    known_face_encodings = data['encodings']
-    known_face_names = data['names']
-except :
-    known_face_encodings = []
-    known_face_names = []
+print(data)
+known_face_encodings = data['encodings']
+known_face_names = data['names']
 
 # Initialize some variables
 face_locations = []
