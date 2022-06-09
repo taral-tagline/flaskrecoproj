@@ -1,8 +1,11 @@
-from flask import Flask, render_template, Response, request, redirect, flash, url_for
+import cv2
+from flask import Flask, render_template, Response, request,flash
 from .facereco import gen_frames
+from .pickle_mesurments import add_into_pickle
 import os
 from pathlib import Path
 from flask_sqlalchemy import SQLAlchemy
+import pickle   
 
 
 PEOPLE_FOLDER = os.path.join(Path(__file__).resolve().parent, "static/capture_image")
@@ -17,9 +20,18 @@ db = SQLAlchemy(app)
 db.init_app(app)
 
 
+PEOPLE_FOLDER = os.path.join(Path(__file__).resolve().parent, "static/capture_image")
+knownEncodings = []
+knownNames = []
+
+
+app = Flask(__name__)
+app.config["UPLOAD_FOLDER"] = PEOPLE_FOLDER
+
+
 @app.route("/")
 def index():
-    static_url = "capture_image/Frame0.jpg"
+    static_url = "capture_image/capture.jpg"
     return render_template("index.html", static_url=static_url)
 
 
@@ -42,8 +54,10 @@ def upload():
         filename = upload_file.filename
         upload_file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
 
+        # store masurments in pickle file
+        add_into_pickle(name)
+
         flash(f"File Uploaded name : {filename} and your name is %s" % name)
     return render_template("upload.html", static_url=static_url)
-
 
 from .db import *
