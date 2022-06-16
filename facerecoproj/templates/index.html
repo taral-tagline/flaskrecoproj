@@ -4,9 +4,46 @@
             <div class="col-lg-8  offset-lg-2">
                 <h3 class="mt-5">JAY SHREE RAM</h3>
                 <img src="{{ url_for('video_feed') }}" width="40%">
-                <img src="{{ url_for('static', filename = static_url ) }}" alt="User Image" width="40%"><br><br>
-                <a href="{{ url_for('upload') }}"> Upload </a>
+                <img src="{{ url_for('static', filename = static_url ) }}" alt="User Image" width="40%"><br>
+                <a href="{{ url_for('upload') }}"> Upload </a><br>
+                <button id="confirmation" value="confirm">Confirm</button><br>
+                <h4>logs :- </h4>
+                <p id="data"></p><br>
+                <h4>user confirmation :- </h4>
+                <p id="user_confirm"></p><br>
             </div>
         </div>
     </div>
-    </body>
+    <!-- <div>
+        <iframe id="log" frameborder="0" onresize="noresize" style='background: transparent; width: 100%; height:100%;'
+            src="#">
+        </iframe>
+    </div> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script>
+        function fetchdata() {
+            $.ajax({
+                type: "GET",
+                url: "/content",
+                dataType: "text",
+                success: function (data) {
+                    document.getElementById("data").innerHTML = data
+                }
+
+            });
+        }
+        setInterval('fetchdata()', 1000);
+
+        $(document).on('click', "#confirmation", function () {
+            $.ajax({
+                type: "GET",
+                url: "/person_details",
+                dataType: "text",
+                success: function (data) {
+                    document.getElementById("user_confirm").innerHTML = data
+                }
+            });
+        });
+    </script>
+</body>

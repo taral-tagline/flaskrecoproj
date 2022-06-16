@@ -2,8 +2,6 @@ import cv2
 import os
 import face_recognition
 import pickle
-import numpy as np
-from flask import Flask, render_template, request, Response
 from pathlib import Path
 
 PEOPLE_FOLDER = os.path.join(Path(__file__).resolve().parent, "static/capture_image")
