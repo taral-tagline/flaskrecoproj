@@ -5,9 +5,11 @@ import numpy as np
 import os
 from pathlib import Path
 import pickle
+from .pickle_measurements import add_into_pickle
 
 # os.path.join(Path(__file__).resolve().parent, "static/capture_image/face_video.mp4")
-camera = cv2.VideoCapture(os.path.join(Path(__file__).resolve().parent, "static/capture_image/face_video.mp4"))
+camera = cv2.VideoCapture(0)
+LESS_THAN_50_ACC = False
 
 # Initialize some variables
 face_locations = []
@@ -16,15 +18,18 @@ face_names = []
 known_face_encodings = []
 known_face_names = []
 
-if os.path.getsize("face_enc.pickle") > 0:
-    data = pickle.loads(open('face_enc.pickle', "rb").read())
-    known_face_encodings = data['encodings']
-    known_face_names = data['names']
+
 
 def variance_of_laplacian(image):
 	return cv2.Laplacian(image, cv2.CV_64F).var()
 
 def gen_frames():
+
+    if os.path.getsize("face_enc.pickle") > 0:
+        data = pickle.loads(open('face_enc.pickle', "rb").read())
+        known_face_encodings = data['encodings']
+        known_face_names = data['names']
+    
     image_capture = 0
     process_this_frame = True
     persons = []
@@ -62,20 +67,21 @@ def gen_frames():
                     face_distances = face_recognition.face_distance(
                         known_face_encodings, face_encoding
                     )
+
                     best_match_index = np.argmin(face_distances)
                     if matches[best_match_index]:
                         name = known_face_names[best_match_index]
-                        # print(name)
+
 
                     # person not identify capture the image
                     if name == "Unknown":
                         # Save Frame into disk using imwrite method
                         if image_capture == 0:
-                            # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-                            # fm = variance_of_laplacian(gray)
-                            # if fm < 100:
-                            #     continue
-                            cv2.imwrite(os.path.join(Path(__file__).resolve().parent,"static/capture_image/Frame0.jpg",),frame,)
+                            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                            fm = variance_of_laplacian(gray)
+                            if fm < 100 :
+                                continue
+                            cv2.imwrite(os.path.join(Path   (__file__).resolve().parent,"static/capture_image/Unknown.jpg",),frame,)
                             image_capture += 1
                     else:
                         if name not in persons :
@@ -83,8 +89,18 @@ def gen_frames():
                             # dd/mm/YY H:M:S
                             dt_string = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
                             f=open('face_capture_log.txt','a')
-                            f.write(f"{name} : {dt_string} \n")
+                            f.write(f"{name} : {dt_string} <br> \n")
                             f.close()
+                        
+                        # if accuracy less then 60 percent but get accurate name store name and masurments.
+                        if face_distances[best_match_index] > 0.4 :
+                            global LESS_THAN_50_ACC
+                            if not LESS_THAN_50_ACC:
+                                LESS_THAN_50_ACC = not LESS_THAN_50_ACC
+                                cv2.imwrite(os.path.join(Path   (__file__).resolve().parent,"static/capture_image/Accuracy_image.jpg",),frame,)
+                                add_into_pickle(known_face_names[best_match_index], "Accuracy_image.jpg")
+                                img_path = os.path.join(Path(__file__).resolve().parent, "static/capture_image/Accuracy_image.jpg")
+                                os.remove(img_path)
 
                     face_names.append(name)
 
@@ -109,8 +125,14 @@ def gen_frames():
                 cv2.putText(
                     frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1
                 )
+
             ret, buffer = cv2.imencode(".jpg", frame)
             frame = buffer.tobytes()
             yield (
                 b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n"
             )  # concat frame one by one and show result
+            
+            # if face_names == []:
+            #     pass
+            # elif "Unknown" not in face_names :
+            #     break
